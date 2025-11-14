@@ -1,52 +1,35 @@
 package Producto.Producto.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-// import jakarta.persistence.JoinColumn;
-// import jakarta.persistence.ManyToOne;
-// import jakarta.persistence.OneToMany;
-// import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Entity // una tabla en la BD,cada atributo es una columna en la tabla
-@Table(name = "productos") // Nombre de la tabla en la BD
-@Data   //Getter and Setter
-@NoArgsConstructor //Constructor sin parametros
-@AllArgsConstructor // Constructor con parametros
+import java.math.BigDecimal;
 
-
-
-// Model – Los datos
-//Aquí defines las clases que representan las cosas del mundo real
-//Sirve para: decirle al sistema qué datos existen.
-
+@Entity
+@Table(name = "producto")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Producto {
-    @Id //esta es la primary key
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // incrementa automático ese id
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable=false, length=150)
     private String nombre;
 
-
-    @Column(length = 255, nullable = true)
+    @Column(columnDefinition = "TEXT")
     private String descripcion;
 
-    //Relación con Categoría
-    @ManyToOne
-    @JoinColumn(name = "categoria_id", nullable = false) //FK
+    @Column(nullable=false, precision=10, scale=2)
+    private BigDecimal precio;
+
+    @Column(length=255)
+    private String imagenUrl;
+
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 
-
-    @Column(nullable = false)
-    private Double precio;
-    private boolean disponible;
 }
