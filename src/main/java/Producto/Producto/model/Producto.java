@@ -27,6 +27,8 @@ public class Producto {
 
     @Column(length=255)
     private String imagenUrl;
+    @Column(nullable = false,columnDefinition = "TINYINT(1)")
+    private boolean disponible;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "categoria_id")

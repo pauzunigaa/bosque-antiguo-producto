@@ -20,7 +20,9 @@ public class ProductoService {
     public List<Producto> listar() {
         return repo.findAll();
     }
-
+    public List<Producto> listarDisponibles() {
+        return repo.findByDisponibleTrue();
+    }
     public Producto obtener(Long id) {
         return repo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -32,18 +34,22 @@ public class ProductoService {
         return repo.save(p);
     }
 
-    public Producto actualizar(Long id, Producto in) {
+    public Producto actualizar(Long id, Producto prodActualizado) {
         Producto p = obtener(id);
 
-        p.setNombre(in.getNombre());
-        p.setDescripcion(in.getDescripcion());
-        p.setPrecio(in.getPrecio());
-        p.setImagenUrl(in.getImagenUrl());
-        p.setCategoria(in.getCategoria());
-
+        p.setNombre(prodActualizado.getNombre());
+        p.setDescripcion(prodActualizado.getDescripcion());
+        p.setPrecio(prodActualizado.getPrecio());
+        p.setImagenUrl(prodActualizado.getImagenUrl());
+        p.setCategoria(prodActualizado.getCategoria());
+        p.setDisponible(prodActualizado.isDisponible());
         return repo.save(p);
     }
-
+    public Producto desactivar(Long id) {
+        Producto p = obtener(id);
+        p.setDisponible(false);
+        return repo.save(p);
+    }
     public void eliminar(Long id) {
         repo.deleteById(id);
     }

@@ -19,8 +19,13 @@ public class ProductoController {
     }
 
     @GetMapping
-    public List<Producto> all() {
-        return service.listar();
+    public List<Producto> listar(
+            @RequestParam(required = false) Boolean disponibles
+    ) {
+        if (Boolean.TRUE.equals(disponibles)) {
+            return service.listarDisponibles();
+        }
+        return service.listar(); // todos
     }
 
     @GetMapping("/{id}")
@@ -38,10 +43,9 @@ public class ProductoController {
     public Producto update(@PathVariable Long id, @RequestBody Producto p) {
         return service.actualizar(id, p);
     }
-
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
-        service.eliminar(id);
+    public Producto desactivar(@PathVariable Long id) {
+        return service.desactivar(id); // ← esto pone disponible=false
     }
+
 }

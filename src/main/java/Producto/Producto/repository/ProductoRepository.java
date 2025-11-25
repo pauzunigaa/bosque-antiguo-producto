@@ -8,4 +8,5 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
 
     // para búsqueda por nombre (opcional pero útil)
     List<Producto> findByNombreContainingIgnoreCase(String nombre);
+    List<Producto> findByDisponibleTrue();
 }
