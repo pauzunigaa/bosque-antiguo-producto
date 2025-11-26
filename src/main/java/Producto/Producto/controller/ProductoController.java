@@ -47,5 +47,10 @@ public class ProductoController {
     public Producto desactivar(@PathVariable Long id) {
         return service.desactivar(id); // ← esto pone disponible=false
     }
+    
+    @PutMapping("/{id}/reducir-stock")
+    public Producto reducirStock(@PathVariable Long id, @RequestParam Integer cantidad) {
+        return service.reducirStock(id, cantidad);
+    }
 
 }
