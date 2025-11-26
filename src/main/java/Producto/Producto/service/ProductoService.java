@@ -50,6 +50,27 @@ public class ProductoService {
         p.setDisponible(false);
         return repo.save(p);
     }
+    
+    public Producto reducirStock(Long id, Integer cantidad) {
+        Producto p = obtener(id);
+        
+        if (p.getStock() < cantidad) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, 
+                "Stock insuficiente. Disponible: " + p.getStock() + ", Solicitado: " + cantidad
+            );
+        }
+        
+        p.setStock(p.getStock() - cantidad);
+        
+        // Si el stock queda en 0, marcamos como no disponible
+        if (p.getStock() <= 0) {
+            p.setDisponible(false);
+        }
+        
+        return repo.save(p);
+    }
+    
     public void eliminar(Long id) {
         repo.deleteById(id);
     }
