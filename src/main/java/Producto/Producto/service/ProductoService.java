@@ -53,6 +53,12 @@ public class ProductoService {
         return repo.save(p);
     }
     
+    public Producto actualizarDisponibilidad(Long id, boolean disponible) {
+        Producto p = obtener(id);
+        p.setDisponible(disponible);
+        return repo.save(p);
+    }
+    
     public Producto reducirStock(Long id, Integer cantidad) {
         System.out.println("=== REDUCIR STOCK LLAMADO ===");
         System.out.println("Producto ID: " + id + ", Cantidad a reducir: " + cantidad);

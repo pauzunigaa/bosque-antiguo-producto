@@ -74,6 +74,26 @@ public class ProductoController {
     public Producto update(@PathVariable Long id, @RequestBody Producto p) {
         return service.actualizar(id, p);
     }
+    
+    @Operation(summary = "Actualizar disponibilidad", description = "Actualiza solo la disponibilidad de un producto")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Disponibilidad actualizada exitosamente",
+            content = @Content(schema = @Schema(implementation = Producto.class))),
+        @ApiResponse(responseCode = "404", description = "Producto no encontrado")
+    })
+    @PatchMapping("/{id}/disponibilidad")
+    public Producto actualizarDisponibilidad(@PathVariable Long id, @RequestBody DisponibilidadRequest request) {
+        return service.actualizarDisponibilidad(id, request.isDisponible());
+    }
+    
+    // DTO para recibir solo el campo disponible
+    public static class DisponibilidadRequest {
+        private boolean disponible;
+        
+        public boolean isDisponible() { return disponible; }
+        public void setDisponible(boolean disponible) { this.disponible = disponible; }
+    }
+    
     @Operation(summary = "Desactivar producto", description = "Desactiva un producto (disponible=false)")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Producto desactivado exitosamente",
