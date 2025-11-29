@@ -11,7 +11,8 @@ import lombok.*;
 public class Inventario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "inventario_seq")
+    @SequenceGenerator(name = "inventario_seq", sequenceName = "INVENTARIO_SEQ", allocationSize = 1)
     private Long id;
 
     @OneToOne(optional = false)

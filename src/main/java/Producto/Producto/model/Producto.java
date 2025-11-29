@@ -13,13 +13,14 @@ import java.math.BigDecimal;
 public class Producto {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "producto_seq")
+    @SequenceGenerator(name = "producto_seq", sequenceName = "PRODUCTO_SEQ", allocationSize = 1)
     private Long id;
 
     @Column(nullable=false, length=150)
     private String nombre;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(length=4000)
     private String descripcion;
 
     @Column(nullable=false, precision=10, scale=2)
@@ -27,8 +28,9 @@ public class Producto {
 
     @Column(length=255)
     private String imagenUrl;
-    @Column(nullable = false,columnDefinition = "TINYINT(1)")
-    private boolean disponible;
+    
+    @Column(nullable = false)
+    private Boolean disponible;
 
     @Column(nullable = false)
     private Integer stock;

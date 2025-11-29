@@ -42,7 +42,7 @@ public class ProductoService {
         p.setPrecio(prodActualizado.getPrecio());
         p.setImagenUrl(prodActualizado.getImagenUrl());
         p.setCategoria(prodActualizado.getCategoria());
-        p.setDisponible(prodActualizado.isDisponible());
+        p.setDisponible(prodActualizado.getDisponible());
         return repo.save(p);
     }
     public Producto desactivar(Long id) {

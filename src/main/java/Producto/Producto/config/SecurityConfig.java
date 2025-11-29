@@ -1,4 +1,4 @@
-﻿package Producto.Producto.config;
+package Producto.Producto.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,15 +44,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Rutas públicas
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/api/test/**").permitAll() // Test endpoints
                         // Lectura de productos - público para el frontend
                         .requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
-                        // Operaciones de modificación requieren rol ADMIN
-                        .requestMatchers(HttpMethod.POST, "/api/v1/products/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/products/**").hasRole("ADMIN")
+                        // Operaciones de modificación requieren rol ADMIN o VENDEDOR
+                        .requestMatchers(HttpMethod.POST, "/api/v1/products/**").hasAnyRole("ADMIN", "VENDEDOR")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/products/**").hasAnyRole("ADMIN", "VENDEDOR")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/products/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/categories/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/categories/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/categories/**").hasAnyRole("ADMIN", "VENDEDOR")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/categories/**").hasAnyRole("ADMIN", "VENDEDOR")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/categories/**").hasRole("ADMIN")
                         // Reducir stock permitido para microservicio de ventas
                         .requestMatchers(HttpMethod.PUT, "/api/v1/products/*/reducir-stock").permitAll()
