@@ -1,4 +1,4 @@
-package Producto.Producto.repository;
+﻿package Producto.Producto.repository;
 
 import Producto.Producto.model.Categoria;
 import org.springframework.data.jpa.repository.JpaRepository;

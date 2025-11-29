@@ -1,4 +1,4 @@
-package Producto.Producto.model;
+﻿package Producto.Producto.model;
 
 import jakarta.persistence.*;
 import lombok.*;
