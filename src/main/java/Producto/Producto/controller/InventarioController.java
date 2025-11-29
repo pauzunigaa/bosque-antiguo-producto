@@ -1,4 +1,4 @@
-﻿package Producto.Producto.controller;
+package Producto.Producto.controller;
 
 import Producto.Producto.model.Inventario;
 import Producto.Producto.repository.InventarioRepository;

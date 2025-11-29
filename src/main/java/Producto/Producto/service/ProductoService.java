@@ -1,4 +1,4 @@
-﻿package Producto.Producto.service;
+package Producto.Producto.service;
 
 import Producto.Producto.model.Producto;
 import Producto.Producto.repository.ProductoRepository;
@@ -43,6 +43,8 @@ public class ProductoService {
         p.setImagenUrl(prodActualizado.getImagenUrl());
         p.setCategoria(prodActualizado.getCategoria());
         p.setDisponible(prodActualizado.getDisponible());
+        p.setStock(prodActualizado.getStock());
+        p.setStockCritico(prodActualizado.getStockCritico());
         return repo.save(p);
     }
     public Producto desactivar(Long id) {
@@ -52,15 +54,22 @@ public class ProductoService {
     }
     
     public Producto reducirStock(Long id, Integer cantidad) {
+        System.out.println("=== REDUCIR STOCK LLAMADO ===");
+        System.out.println("Producto ID: " + id + ", Cantidad a reducir: " + cantidad);
+        
         Producto p = obtener(id);
+        System.out.println("Producto encontrado: " + p.getNombre() + ", Stock actual: " + p.getStock());
         
         if (p.getStock() < cantidad) {
+            String errorMsg = "Stock insuficiente para '" + p.getNombre() + "'. Disponible: " + p.getStock() + ", Solicitado: " + cantidad;
+            System.err.println("ERROR: " + errorMsg);
             throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST, 
-                "Stock insuficiente. Disponible: " + p.getStock() + ", Solicitado: " + cantidad
+                errorMsg
             );
         }
         
+        int stockAnterior = p.getStock();
         p.setStock(p.getStock() - cantidad);
         
         // Si el stock queda en 0, marcamos como no disponible
@@ -68,7 +77,10 @@ public class ProductoService {
             p.setDisponible(false);
         }
         
-        return repo.save(p);
+        System.out.println("Stock actualizado: " + stockAnterior + " -> " + p.getStock());
+        Producto productoGuardado = repo.save(p);
+        System.out.println("Producto guardado exitosamente");
+        return productoGuardado;
     }
     
     public void eliminar(Long id) {

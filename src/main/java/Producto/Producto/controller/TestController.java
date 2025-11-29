@@ -34,7 +34,7 @@ public class TestController {
     
     @GetMapping("/public")
     public Map<String, String> testPublic() {
-        return Map.of("message", "Este endpoint es público");
+        return Map.of("message", "Este endpoint es pÃºblico");
     }
     
     @GetMapping("/admin-test")

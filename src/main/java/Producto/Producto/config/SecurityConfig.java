@@ -48,15 +48,15 @@ public class SecurityConfig {
                         // Lectura de productos - público para el frontend
                         .requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
-                        // Operaciones de modificación requieren rol ADMIN o VENDEDOR
+                        // Reducir stock permitido para microservicio de ventas (sin autenticación)
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/products/*/reducir-stock").permitAll()
+                        // Operaciones de modificaciÃ³n requieren rol ADMIN o VENDEDOR
                         .requestMatchers(HttpMethod.POST, "/api/v1/products/**").hasAnyRole("ADMIN", "VENDEDOR")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/products/**").hasAnyRole("ADMIN", "VENDEDOR")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/products/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/categories/**").hasAnyRole("ADMIN", "VENDEDOR")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/categories/**").hasAnyRole("ADMIN", "VENDEDOR")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/categories/**").hasRole("ADMIN")
-                        // Reducir stock permitido para microservicio de ventas
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/products/*/reducir-stock").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
