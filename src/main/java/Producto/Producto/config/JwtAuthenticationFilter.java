@@ -29,6 +29,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, 
                                     FilterChain filterChain) throws ServletException, IOException {
         
+        // Excluir el endpoint de reducir stock de la validación JWT (para comunicación entre microservicios)
+        String requestPath = request.getRequestURI();
+        if (requestPath.matches(".*/api/v1/products/\\d+/reducir-stock")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        
         String authHeader = request.getHeader("Authorization");
         
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
@@ -42,16 +49,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     .getPayload();
                 
                 String username = claims.getSubject();
+                String userId = claims.get("userId", String.class);
                 @SuppressWarnings("unchecked")
                 List<String> roles = (List<String>) claims.get("roles");
                 
                 if (username != null && roles != null) {
                     List<SimpleGrantedAuthority> authorities = roles.stream()
-                        .map(SimpleGrantedAuthority::new)
+                        .map(role -> new SimpleGrantedAuthority("ROLE_" + role)) 
                         .collect(Collectors.toList());
                     
                     UsernamePasswordAuthenticationToken auth = 
                         new UsernamePasswordAuthenticationToken(username, null, authorities);
+                    
+                    // Agregar userId a los details si está disponible
+                    if (userId != null) {
+                        auth.setDetails(userId);
+                    }
                     
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
