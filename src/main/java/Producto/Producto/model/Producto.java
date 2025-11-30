@@ -38,6 +38,12 @@ public class Producto {
     @Column(nullable = false)
     private Integer stockCritico;
 
+    @Column(nullable = false)
+    private Integer stock;
+
+    @Column(nullable = false)
+    private Integer stockCritico;
+
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
